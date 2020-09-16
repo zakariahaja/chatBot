@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+        <link rel="stylesheet" href="./static/css/style.css">
+		<link rel="stylesheet" href="./static/css/bootstrap.min.css">
+		<link rel="stylesheet" href="./static/css/all.css" >
+		<script src="./static/js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="./static/css/jquery.mCustomScrollbar.min.css">
+		<script type="text/javascript" src="./static/js/jquery.mCustomScrollbar.min.js"></script>
+	</head>
+
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+				<div class="col-md-8 col-xl-6 chat">
+					<div class="card">
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="./static/img/robot_icon.jpg" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+								<div class="user_info">
+									<span>Chat with GI5Bot</span>
+								</div>
+							</div>
+						</div>
+						<div class="card-body msg_card_body">
+                            <div id="chatbox">
+
+                            </div>
+						</div>
+						<div class="card-footer">
+							<div class="input-group">
+                                <input id="textInput" class="form-control type_msg" type="text" name="msg" placeholder="Type Your Message ...">
+                                <div id="buttonInput" class="input-group-append">
+									<span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    <script>
+            function getResponse() {
+                let userText = $("#textInput").val();
+                let userHtml = '<div class="d-flex justify-content-end mb-4"> <div class="msg_cotainer_send">'+ userText + '</div><div class="img_cont_msg"><img src="./static/img/man_icon.jpg" class="rounded-circle user_img_msg"> </div> </div>';
+                $("#textInput").val("");
+                $("#chatbox").append(userHtml);
+                document.getElementById('textInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+                $.get("/get", { msg: userText }).done(function(data) {
+                var botHtml = '<div class="d-flex justify-content-start mb-4"> <div class="img_cont_msg"><img src="./static/img/robot_icon.jpg" class="rounded-circle user_img_msg"> </div> <div class="msg_cotainer">'+ data + '</div></div>';
+                $("#chatbox").append(botHtml);
+                document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+        });
+        }
+            $("#textInput").keypress(function(e) {
+            //if enter key is pressed
+                if(e.which == 13) {
+                    getResponse();
+                }
+            });
+            $("#buttonInput").click(function() {
+                getResponse();
+            });
+        </script>
+	</body>
+</html>
